@@ -20,19 +20,21 @@ public class SpellChecker {
 	}
 
 	public static int levenshtein(String word1, String word2) {
-    if (word1.equals("")) {
-        return word2.length();
+    String wordOne = word1.toLowerCase();
+    String wordTwo = word2.toLowerCase();
+    if (wordOne.equals("")) {
+        return wordTwo.length();
     }
-    if (word2.equals("")) {
-        return word1.length();
+    if (wordTwo.equals("")) {
+        return wordOne.length();
     }
-    if (head(word1).equals(head(word2))) {
-        return levenshtein(tail(word1), tail(word2));
+    if (head(wordOne).equals(head(wordTwo))) {
+        return levenshtein(tail(wordOne), tail(wordTwo));
     }
 
-    int firstCheck = levenshtein(tail(word1), word2);
-    int secondCheck = levenshtein(word1, tail(word2));
-    int thirdCheck = levenshtein(tail(word1), tail(word2));
+    int firstCheck = levenshtein(tail(wordOne), wordTwo);
+    int secondCheck = levenshtein(wordOne, tail(wordTwo));
+    int thirdCheck = levenshtein(tail(wordOne), tail(wordTwo));
 
     return 1 + Math.min(firstCheck, Math.min(secondCheck, thirdCheck));
 }
@@ -56,12 +58,9 @@ public class SpellChecker {
         int distance = levenshtein(word, dictionary[i]);
 
         if (distance <= threshold) {
-        	if(newWord!=word){
-        		if (distance < levenshtein(word, newWord)) {
-        			 newWord = dictionary[i];
-        		}
-        	}
-            newWord = dictionary[i];
+            if (distance < levenshtein(word, newWord) || newWord.equals(word)) {
+                newWord = dictionary[i];
+            }
         }
     }
 
